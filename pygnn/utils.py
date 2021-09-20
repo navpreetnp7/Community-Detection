@@ -19,29 +19,6 @@ def load_data(daily=False):
         adj = adj[:,1:, 1:]
         return np.array(adj)
 
-
-def normalize(adj):
-
-    adj = torch.FloatTensor(adj)
-    adj_id = torch.FloatTensor(torch.eye(adj.shape[1]))
-    adj_id = adj_id.reshape((1, adj.shape[1], adj.shape[1]))
-    adj_id = adj_id.repeat(adj.shape[0], 1, 1)
-    adj = adj + adj_id
-    rowsum = torch.FloatTensor(adj.sum(2))
-    degree_mat_inv_sqrt = torch.diag_embed(torch.float_power(rowsum,-0.5), dim1=-2, dim2=-1).float()
-    adj_norm = torch.bmm(torch.transpose(torch.bmm(adj,degree_mat_inv_sqrt),1,2),degree_mat_inv_sqrt)
-
-    return adj_norm
-
-def norm_embed(embed):
-    embedx,embedy = torch.chunk(embed,chunks=2,dim=2)
-    ES = (embedx ** 2).sum(axis=1) / (embedy ** 2).sum(axis=1)
-    ES = ES.unsqueeze(dim=1)
-    embedx = embedx / (ES ** 0.25)
-    embedy = embedy / (ES ** 0.25)
-    embed_norm = torch.cat((embedx,embedy),dim=2)
-    return embed_norm
-
 def toy_data():
 
     graph = nx.DiGraph()
@@ -67,24 +44,3 @@ def nmi_score(adj1,adj2):
     partition1 = pycombo.execute(G1)
     partition2 = pycombo.execute(G2)
     return nmi(list(partition1[0]),list(partition2[0]))
-
-
-def svdApprox(adj, dim, relu=False):
-    adj = torch.FloatTensor(adj[0])
-    U, S, Vh = torch.linalg.svd(adj)
-    mu = torch.matmul(torch.matmul(U[:, :dim], torch.diag(S[:dim])), Vh[:dim, :])
-
-    embedx = torch.matmul(U[:, :dim], torch.diag(torch.pow(S[:dim], 0.5)))
-    embedy = torch.transpose(torch.matmul(torch.diag(torch.pow(S[:dim], 0.5)), Vh[:dim, :]), 0, 1)
-
-    criterion = torch.nn.GaussianNLLLoss()
-    if relu:
-        crt = torch.nn.ReLU()
-        mu = crt(mu)
-    mse = torch.nn.MSELoss()
-    mseloss = mse(torch.flatten(mu), torch.flatten(adj))
-    sig = torch.sqrt(mseloss)
-    sigma = sig * torch.ones(adj.shape)
-    loss = criterion(torch.flatten(adj), torch.flatten(mu), torch.flatten(torch.square(sigma)))
-
-    return mu, sigma, loss.item(), embedx, embedy

@@ -4,14 +4,10 @@ from torch.nn.parameter import Parameter
 from torch.nn.modules.module import Module
 
 
-class GraphConvolution(Module):
-
-    """
-    Simple GCN layer, similar to https://arxiv.org/abs/1609.02907
-    """
+class GraphNeuralNet(Module):
 
     def __init__(self, batch_size, in_features, out_features, mu0, sigma0, scale):
-        super(GraphConvolution, self).__init__()
+        super(GraphNeuralNet, self).__init__()
         self.in_features = in_features
         self.out_features = out_features
         self.batch_size = batch_size

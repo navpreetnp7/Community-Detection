@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="27953316-4a22-4074-95f4-655b047b1f37" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pygnn/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygnn/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pygnn/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygnn/train.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pygnn/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygnn/utils.py" afterDir="false" />
-    </list>
+    <list default="true" id="27953316-4a22-4074-95f4-655b047b1f37" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -53,7 +48,7 @@
       <workItem from="1631482057121" duration="2000" />
       <workItem from="1632181549575" duration="1435000" />
       <workItem from="1632182995809" duration="11093000" />
-      <workItem from="1632259165501" duration="4881000" />
+      <workItem from="1632259165501" duration="5416000" />
     </task>
     <servers />
   </component>

@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="27953316-4a22-4074-95f4-655b047b1f37" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pygnn/layers.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygnn/layers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pygnn/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygnn/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pygnn/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygnn/train.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pygnn/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygnn/utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -24,6 +29,19 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="PyConsoleOptionsProvider">
+    <option name="myPythonConsoleState">
+      <console-settings module-name="Community-Detection" is-module-sdk="true">
+        <option name="myUseModuleSdk" value="true" />
+        <option name="myModuleName" value="Community-Detection" />
+      </console-settings>
+    </option>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -34,11 +52,15 @@
       <option name="presentableId" value="Default" />
       <updated>1631482055845</updated>
       <workItem from="1631482057121" duration="2000" />
-      <workItem from="1632181549575" duration="393000" />
+      <workItem from="1632181549575" duration="1435000" />
+      <workItem from="1632182995809" duration="8515000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Community_Detection$Community_Detection.coverage" NAME="Community-Detection Coverage Results" MODIFIED="1632183958899" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/.." />
   </component>
 </project>

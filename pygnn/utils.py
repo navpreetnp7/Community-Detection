@@ -19,6 +19,20 @@ def load_data(daily=False):
         adj = adj[:,1:, 1:]
         return np.array(adj)
 
+
+def normalize(adj):
+
+    adj = torch.FloatTensor(adj)
+    adj_id = torch.FloatTensor(torch.eye(adj.shape[1]))
+    adj_id = adj_id.reshape((1, adj.shape[1], adj.shape[1]))
+    adj_id = adj_id.repeat(adj.shape[0], 1, 1)
+    adj = adj + adj_id
+    rowsum = torch.FloatTensor(adj.sum(2))
+    degree_mat_inv_sqrt = torch.diag_embed(torch.float_power(rowsum,-0.5), dim1=-2, dim2=-1).float()
+    adj_norm = torch.bmm(torch.transpose(torch.bmm(adj,degree_mat_inv_sqrt),1,2),degree_mat_inv_sqrt)
+
+    return adj_norm
+
 def toy_data():
 
     graph = nx.DiGraph()
@@ -44,3 +58,23 @@ def nmi_score(adj1,adj2):
     partition1 = pycombo.execute(G1)
     partition2 = pycombo.execute(G2)
     return nmi(list(partition1[0]),list(partition2[0]))
+
+def modularity_matrix(adj):
+
+    batch_size = adj.shape[0]
+    w_in = adj.sum(axis=1).reshape(batch_size, 1, -1)
+    w_out = adj.sum(axis=2).reshape(batch_size, -1, 1)
+    T = w_out.sum(axis=1).unsqueeze(axis=1)
+
+    Q = adj / T - w_out * w_in / T ** 2
+
+    return Q
+
+def modularity(C,Q):
+
+    Q1 = torch.bmm(torch.transpose(C,2,1), Q)
+    Q2 = torch.bmm(Q1, C)
+    #M = torch.trace(Q2)
+    M = Q2.diagonal(offset=0, dim1=-1, dim2=-2).sum(-1).reshape(Q2.shape[0],-1)
+
+    return M

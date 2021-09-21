@@ -8,8 +8,11 @@ import numpy as np
 import torch
 import torch.optim as optim
 
-from utils import load_data,normalize,toy_data,norm_embed,nmi_score,svdApprox
+from utils import load_data,normalize,toy_data,nmi_score,modularity_matrix,modularity
 from models import GNN
+
+import community as community_louvain
+from networkx import from_numpy_matrix
 
 torch.set_printoptions(sci_mode=False)
 
@@ -20,7 +23,7 @@ parser.add_argument('--no-cuda', action='store_true', default=False,
 parser.add_argument('--fastmode', action='store_true', default=False,
                     help='Validate during training pass.')
 parser.add_argument('--seed', type=int, default=426, help='Random seed.')
-parser.add_argument('--epochs', type=int, default=20001,
+parser.add_argument('--epochs', type=int, default=5,
                     help='Number of epochs to train.')
 parser.add_argument('--lr', type=float, default=0.00001,
                     help='Initial learning rate.')
@@ -39,52 +42,40 @@ torch.manual_seed(args.seed)
 if args.cuda:
     torch.cuda.manual_seed(args.seed)
 
-fixed=False
-
 # Load data
 adj = load_data(daily=False)
 #adj = toy_data()
+G = from_numpy_matrix(adj[0])
 
 adj_norm = normalize(adj)
 
 adj = torch.FloatTensor(np.array(adj))
 adj_norm = torch.FloatTensor(np.array(adj_norm))
 
-# loss function
-criterion = torch.nn.GaussianNLLLoss()
+# features
+partition = community_louvain.best_partition(G)
 
-# NULL Model
-mu0 = adj.mean() * torch.ones(adj.shape[1:])
-sigma0 = adj.std() * torch.ones(adj.shape[1:])
-with torch.no_grad():
-    loss0 = criterion(torch.flatten(adj), torch.flatten(mu0), torch.flatten(torch.square(sigma0)))
+#get binary matrix of the partition
+nb_community = max(list(partition.values())) + 1
+communities =  np.array(list(partition.values())).reshape(-1)
+C = np.eye(nb_community)[communities]
+features = torch.FloatTensor(C)
+features = features.unsqueeze(0)
 
-#svd features
-svd_mu,svd_sig,svd_loss,svdembedx,svdembedy = svdApprox(adj=adj,dim=args.ndim)
-features = torch.cat((svdembedx,svdembedy),dim=1)
-if not fixed:
-    mse = torch.nn.MSELoss()
-    mseloss = mse(torch.flatten(svd_mu),torch.flatten(adj))
-    sig = torch.sqrt(mseloss)/args.ndim
-    ones = torch.ones(features.size())*torch.sqrt(sig)
-    features = torch.cat((features,ones),dim=1)
-features = features.unsqueeze(dim=0)
+Q = modularity_matrix(adj)
 
 # Model and optimizer
 
 model = GNN(batch_size=adj.shape[0],
             nfeat=adj.shape[1],
-            nhid=adj.shape[1],
-            ndim=args.ndim,
-            mu0=adj.mean(),
-            sigma0=adj.std(),
-            fixed=fixed)
+            ndim=args.ndim)
 
 if args.cuda:
     model.cuda()
     features = features.cuda()
     adj = adj.cuda()
     adj_norm = adj_norm.cuda()
+    Q = Q.cuda()
 
 # Train model
 t_total = time.time()
@@ -99,17 +90,10 @@ for epoch in range(args.epochs):
     model.train()
     optimizer.zero_grad()
 
-    if fixed:
-        mu,lr = model(features, adj_norm)
-        with torch.no_grad():
-            mse = torch.nn.MSELoss()
-            mseloss = mse(torch.flatten(mu), torch.flatten(adj))
-            sig = torch.sqrt(mseloss)
-        sigma = sig * torch.ones(adj.shape, requires_grad=True)
-    else:
-        mu, sigma,lr = model(features, adj_norm)
+    C = model(features, adj_norm)
 
-    loss = criterion(torch.flatten(adj), torch.flatten(mu), torch.flatten(torch.square(sigma)))
+    loss = modularity(C,Q)
+
     loss.backward()
 
     optimizer.step()

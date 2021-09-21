@@ -14,5 +14,4 @@ class GNN(nn.Module):
     def forward(self, x, adj):
         x = self.gc1(x, adj)
         x = x/x.sum(axis=2).unsqueeze(2) #normalize st sum = 1
-        print(x)
         return x

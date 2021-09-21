@@ -23,7 +23,7 @@ parser.add_argument('--no-cuda', action='store_true', default=False,
 parser.add_argument('--fastmode', action='store_true', default=False,
                     help='Validate during training pass.')
 parser.add_argument('--seed', type=int, default=426, help='Random seed.')
-parser.add_argument('--epochs', type=int, default=5,
+parser.add_argument('--epochs', type=int, default=20000,
                     help='Number of epochs to train.')
 parser.add_argument('--lr', type=float, default=0.00001,
                     help='Initial learning rate.')
@@ -91,7 +91,7 @@ for epoch in range(args.epochs):
     optimizer.zero_grad()
 
     C = model(features, adj_norm)
-
+    #print(C)
     loss = modularity(C,Q)
 
     loss.backward()
@@ -108,6 +108,8 @@ for epoch in range(args.epochs):
         print('Epoch: {:04d}'.format(epoch + 1),
               'loss: {:.8f}'.format(best_loss.item()),
               'time: {:.4f}s'.format(time.time() - t))
+
+
 
 print("Optimization Finished!")
 print("Total time elapsed: {:.4f}s".format(time.time() - t_total))

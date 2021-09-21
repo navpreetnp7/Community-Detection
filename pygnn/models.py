@@ -2,7 +2,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from layers import GraphNeuralNet
 import torch
-
+from utils import doublerelu
 
 class GNN(nn.Module):
 
@@ -12,6 +12,6 @@ class GNN(nn.Module):
         self.gc1 = GraphNeuralNet(batch_size, nfeat, ndim)
 
     def forward(self, x, adj):
-        x = self.gc1(x, adj)
+        x = doublerelu(self.gc1(x, adj))
         x = x/x.sum(axis=2).unsqueeze(2) #normalize st sum = 1
         return x

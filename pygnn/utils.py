@@ -77,4 +77,7 @@ def modularity(C,Q):
     #M = torch.trace(Q2)
     M = Q2.diagonal(offset=0, dim1=-1, dim2=-2).sum(-1).reshape(Q2.shape[0],-1)
 
-    return M
+    return -M
+
+def doublerelu(x):
+    return torch.clamp(x, 0, 1)

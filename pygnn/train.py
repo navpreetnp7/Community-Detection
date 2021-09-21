@@ -20,10 +20,10 @@ parser.add_argument('--no-cuda', action='store_true', default=False,
                     help='Disables CUDA training.')
 parser.add_argument('--fastmode', action='store_true', default=False,
                     help='Validate during training pass.')
-parser.add_argument('--seed', type=int, default=426, help='Random seed.')
-parser.add_argument('--epochs', type=int, default=2,
+parser.add_argument('--seed', type=int, default=165, help='Random seed.')
+parser.add_argument('--epochs', type=int, default=10001,
                     help='Number of epochs to train.')
-parser.add_argument('--lr', type=float, default=0.00001,
+parser.add_argument('--lr', type=float, default=0.001,
                     help='Initial learning rate.')
 parser.add_argument('--weight_decay', type=float, default=10e-4,
                     help='Weight decay (L2 loss on parameters).')
@@ -41,6 +41,7 @@ if args.cuda:
     torch.cuda.manual_seed(args.seed)
 
 # Load data
+
 #adj = load_data(daily=False)
 #adj = toy_data()
 #G = from_numpy_matrix(adj[0])
@@ -66,10 +67,6 @@ features = features.unsqueeze(0)
 C = torch.FloatTensor(C).unsqueeze(0)
 
 Q = modularity_matrix(adj)
-
-
-print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-print(modularity(C,Q))
 
 # Model and optimizer
 
@@ -113,7 +110,7 @@ for epoch in range(args.epochs):
 
     if epoch % 100 == 0:
         print('Epoch: {:04d}'.format(epoch + 1),
-              'loss: {:.8f}'.format(best_loss.item()),
+              'loss: {:.8f}'.format(-best_loss.item()),
               'time: {:.4f}s'.format(time.time() - t))
 
 

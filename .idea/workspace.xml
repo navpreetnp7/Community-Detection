@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="27953316-4a22-4074-95f4-655b047b1f37" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pygnn/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygnn/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pygnn/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/pygnn/train.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -52,6 +51,7 @@
       <workItem from="1631482057121" duration="2000" />
       <workItem from="1632181549575" duration="1435000" />
       <workItem from="1632182995809" duration="11093000" />
+      <workItem from="1632259165501" duration="3404000" />
     </task>
     <servers />
   </component>

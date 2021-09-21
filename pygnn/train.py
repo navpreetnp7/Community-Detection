@@ -1,6 +1,3 @@
-from __future__ import division
-from __future__ import print_function
-
 import time
 import argparse
 import numpy as np
@@ -13,6 +10,7 @@ from models import GNN
 
 import community as community_louvain
 from networkx import from_numpy_matrix
+import networkx as nx
 
 torch.set_printoptions(sci_mode=False)
 
@@ -23,7 +21,7 @@ parser.add_argument('--no-cuda', action='store_true', default=False,
 parser.add_argument('--fastmode', action='store_true', default=False,
                     help='Validate during training pass.')
 parser.add_argument('--seed', type=int, default=426, help='Random seed.')
-parser.add_argument('--epochs', type=int, default=20000,
+parser.add_argument('--epochs', type=int, default=2,
                     help='Number of epochs to train.')
 parser.add_argument('--lr', type=float, default=0.00001,
                     help='Initial learning rate.')
@@ -43,9 +41,13 @@ if args.cuda:
     torch.cuda.manual_seed(args.seed)
 
 # Load data
-adj = load_data(daily=False)
+#adj = load_data(daily=False)
 #adj = toy_data()
-G = from_numpy_matrix(adj[0])
+#G = from_numpy_matrix(adj[0])
+
+G = nx.karate_club_graph()
+adj = nx.to_numpy_matrix(G)
+adj = np.expand_dims(adj, axis=0)
 
 adj_norm = normalize(adj)
 
@@ -61,14 +63,19 @@ communities =  np.array(list(partition.values())).reshape(-1)
 C = np.eye(nb_community)[communities]
 features = torch.FloatTensor(C)
 features = features.unsqueeze(0)
+C = torch.FloatTensor(C).unsqueeze(0)
 
 Q = modularity_matrix(adj)
+
+
+print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+print(modularity(C,Q))
 
 # Model and optimizer
 
 model = GNN(batch_size=adj.shape[0],
             nfeat=adj.shape[1],
-            ndim=args.ndim)
+            ndim=nb_community)
 
 if args.cuda:
     model.cuda()
@@ -76,6 +83,7 @@ if args.cuda:
     adj = adj.cuda()
     adj_norm = adj_norm.cuda()
     Q = Q.cuda()
+    C = C.cuda()
 
 # Train model
 t_total = time.time()
@@ -91,7 +99,6 @@ for epoch in range(args.epochs):
     optimizer.zero_grad()
 
     C = model(features, adj_norm)
-    #print(C)
     loss = modularity(C,Q)
 
     loss.backward()

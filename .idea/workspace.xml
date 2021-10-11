@@ -24,7 +24,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Jupyter/Community-Detection" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -51,6 +51,7 @@
       <workItem from="1632181549575" duration="1435000" />
       <workItem from="1632182995809" duration="11093000" />
       <workItem from="1632259165501" duration="7632000" />
+      <workItem from="1633025392770" duration="776000" />
     </task>
     <servers />
   </component>

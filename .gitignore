@@ -3,3 +3,4 @@ pygnn/data/Taxi2017_daily_net.pkl
 pygnn/data/Taxi2017_total_net.pkl
 pygnn/data/TaxiNet2017_3h_.mat
 pygnn/data/totalTaxiNet_partition.mat
+data/LEHD_nyc.csv
